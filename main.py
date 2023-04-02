@@ -1,34 +1,41 @@
 # python3
 
-class PhoneBookManager:
+class PhoneBook:
     def __init__(self):
         self.contacts = {}
+
     def add_contact(self, number, name):
         self.contacts[number] = name
-    def del_contact(self,number):
+
+    def delete_contact(self,number):
+        if number in self.contacts:
+            del self.contacts[number]
+    
+    def fine_contact(self, number):
         if number in self.contacts:
             return self.contacts[number]
         else:
-            return 'not found'
-    def process_queries(self, queries):
-        result = []
-        for query in queries:
-            query_type = query[0]
-            number = int(query[1])
-            if query_type == 'add':
-                name = query[2]
-                self.add_contact(number, name)
-            elif query_type == 'del':
-                self.del_contact(number)
-            elif query_type == 'find':
-                result.append(self.find_contact(number))
-        return result
+            return "not found"
 
+def process_queries(queries):
+    result = []
+    phone_book = PhoneBook()
+    for query in queries:
+        if query.type == 'add':
+            phone_book.add_contact(query.number, query.name)
+        elif query.type == 'del':
+            phone_book.delete_contact(query.number)
+        elif query.type == 'find':
+            result.append(phone_book.find_contact(query.number))
+    return result
+       
 if __name__ == '__main__':
-    pbm = PhoneBookManager()
     n = int(input())
-    queries = [input().split() for i in range(n)]
-    results = pbm.process_queries(queries)
-    print('\n'.join(results))
+    queries = []
+    for i in range(n):
+        query = Query(input().split())
+        queries.append(query)
+    result = process_queries(queries)
+    write_responses(result)
 
 
