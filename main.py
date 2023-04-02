@@ -1,39 +1,32 @@
 # python3
 
-class PhoneBook:
-    def __init__(self):
-        self.contacts = {}
-
-    def add_contact(self, number, name):
-        self.contacts[number] = name
-
-    def delete_contact(self,number):
-        if number in self.contacts:
-            del self.contacts[number]
-    
-    def fine_contact(self, number):
-        if number in self.contacts:
-            return self.contacts[number]
-        else:
-            return "not found"
+class Query:
+    def __init__(self, query):
+        self.type = query[0]
+        self.number = int(query[1])
+        if self.type == 'add':
+            self.name = query[2]
 
 def read_queries():
     n = int(input())
-    return [input().split for i in range(n)]
+    return [Query(input().split()) for i in range(n)]
 
 def write_responses(result):
     print('\n'.join(result))
 
 def process_queries(queries):
-    phonebook = PhoneBook()
     result = []
-    for query in queries:
-        if query[0] == 'add':
-            phonebook.add_contact(query[1], query[2])
-        elif query[0] == 'del':
-            phonebook.delete_contact(query[1])
-        elif query[0] == 'find':
-            result.append(phonebook.find_contact(query[1]))
+    contacts = {}
+
+    for cur_query in queries:
+        if cur_query.type == 'add':
+            contacts[cur_query.number] = cur_query.name
+        elif cur_query.type == 'del':
+            if cur_query.number in contacts:
+                del contacts[cur_query.number]
+        else:
+            response = contacts.get(cur_query.number, 'not found')
+            result.append(response)
     return result
 
 if __name__ == '__main__':
