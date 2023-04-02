@@ -17,25 +17,32 @@ class PhoneBook:
         else:
             return "not found"
 
-def process_queries(queries):
-    result = []
-    phone_book = PhoneBook()
-    for query in queries:
-        if query.type == 'add':
-            phone_book.add_contact(query.number, query.name)
-        elif query.type == 'del':
-            phone_book.delete_contact(query.number)
-        elif query.type == 'find':
-            result.append(phone_book.find_contact(query.number))
-    return result
-       
-if __name__ == '__main__':
+def read_queries():
     n = int(input())
-    queries = []
-    for i in range(n):
-        query = Query(input().split())
-        queries.append(query)
-    result = process_queries(queries)
-    write_responses(result)
+    return [input().split for i in range(n)]
+
+def write_responses(result):
+    print('\n'.join(result))
+
+def process_queries(queries):
+    phonebook = PhoneBook()
+    result = []
+    for query in queries:
+        if query[0] == 'add':
+            phonebook.add_contact(query[1], query[2])
+        elif query[0] == 'del':
+            phonebook.delete_contact(query[1])
+        elif query[0] == 'find':
+            result.append(phonebook.find_contact(query[1]))
+    return result
+
+if __name__ == '__main__':
+    write_responses(process_queries(read_queries()))
+
+
+
+
+
+    
 
 
